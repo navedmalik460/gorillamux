@@ -29,3 +29,26 @@ func main() {
   http.ListenAndServe(":8080", r)
 }
 Sumple gorilla mux hello api end point "http://localhost:8080/" and "http://localhost:8080/hello"
+
+Handle advance route with it's own handle function ratherthan writing in same function and call to make code neet and clean
+// advance routes with handlers used to define own handlers
+func advancedRoutes() *mux.Router {
+	r := mux.NewRouter()
+	userRouter := r.PathPrefix("/user").Subrouter()
+	userRouter.HandleFunc("/getuser/{id}", handlerfunc.HandleGetuser).Methods("GET")
+
+	r.HandleFunc("/hello/{name}/age/{age}", func(w http.ResponseWriter, r *http.Request) {
+		vars := mux.Vars(r)
+		name := vars["name"]
+		age := vars["age"]
+		fmt.Fprintf(w, "Hello, %s! You are %s years old.", name, age)
+	}).Methods("GET")
+
+	return r
+
+}
+// check handlerfunc for the handling of user calls
+this function has subroutes features as well to understand subroutes please follow this code 
+userRouter := r.PathPrefix("/user").Subrouter()
+userRouter.HandleFunc("/getuser/{id}", handlerfunc.HandleGetuser).Methods("GET")
+
